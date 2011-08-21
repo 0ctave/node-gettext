@@ -18,7 +18,7 @@ function GettextDomain(textdomain){
     this.table_translations = [];
     this.cache = [];
     
-    this.charset = "iso-8859-1";
+    this.charset = "utf-8";
     this.headers = false;
     
     if(this.total){
