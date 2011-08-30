@@ -137,28 +137,33 @@ GettextDomain.prototype.parseHeaders = function(data){
 GettextDomain.prototype.parsePluralHeader = function(){
     var parts, nr, sentence;
     if(!this.headers['plural-forms'])return;
-    
+
     parts = this.headers['plural-forms'].split(";");
-    
-    nr = parts.shift() || "";
+
+    nr = parts.shift() || "";
     if(nr = nr.match(/nplurals\s*=\s*(\d+)/i) || false){
         nr = Number(nr[1]);
     }
     nr = Math.abs(nr || 1);
-    
-    sentence = (parts.shift() || "").trim().replace(/^plural\s*=s*/,'') || "0";
-    
+
+    sentence = (parts.shift() || "").trim().replace(/^plural\s*=s*/,'') || "0";
+
+    this.pluralConfig = {
+        nr: nr,
+        sentence: sentence
+    };
+
     if(nr<=1 || sentence == "0"){
-        return;
+       	return;
     }
-    
+
     var script;
     try{
         script = vm.createScript("plural = " + sentence);
     }catch(E){
         script = vm.createScript("plural = 0");
     }
-    
+
     // generate plural detector
     this.get_plural = function(n){
         var sandbox = {n:n, plural:0}
